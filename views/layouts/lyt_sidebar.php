@@ -46,7 +46,56 @@ use yii\bootstrap4\Html;
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Operaciones:</h6>
-                
+
+                     <?= Html::a(
+                        'Archivo',
+                        ['/archivo/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+                    <?= Html::a(
+                        'Carrera',
+                        ['/carrera/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+                    <?= Html::a(
+                        'Categoria',
+                        ['/categoria/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+                    <?= Html::a(
+                        'Coordinacion',
+                        ['/coordinacion/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+                    <?= Html::a(
+                        'Curso',
+                        ['/curso/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+                    <?= Html::a(
+                        'Cursodetalle',
+                        ['/cursodetalle/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+                    <?= Html::a(
+                        'Estudiante',
+                        ['/estudiante/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+                    <?= Html::a(
+                        'Profesor',
+                        ['/profesor/index'],
+                        ['class' => 'collapse-item']
+                    ); ?>
+
+
                     <?= Html::a(
                         'Opcion 1',
                         ['/tuestatu/index'],
