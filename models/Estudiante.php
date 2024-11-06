@@ -9,11 +9,11 @@ use Yii;
  *
  * @property int $ID
  * @property string $Nombre
- * @property int $Ap_paterno
- * @property int $Ap_materno
+ * @property string $Ap_paterno
+ * @property string $Ap_materno
  * @property string $Correo
  * @property string $Fecha_inscripcion
- * @property int $Fk_carrera
+ * @property int|null $Fk_carrera
  * @property int $Semestre
  * @property string $Turno
  * @property int|null $Fecha_creacion
@@ -40,10 +40,11 @@ class Estudiante extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Nombre', 'Ap_paterno', 'Ap_materno', 'Correo', 'Fecha_inscripcion', 'Fk_carrera', 'Semestre', 'Turno'], 'required'],
-            [['Ap_paterno', 'Ap_materno', 'Fk_carrera', 'Semestre', 'Fecha_creacion', 'Fecha_actualizacion', 'Fk_user'], 'integer'],
+            [['Nombre', 'Ap_paterno', 'Ap_materno', 'Correo', 'Fecha_inscripcion', 'Semestre', 'Turno'], 'required'],
             [['Fecha_inscripcion'], 'safe'],
-            [['Nombre'], 'string', 'max' => 30],
+            [['Fk_carrera', 'Semestre', 'Fecha_creacion', 'Fecha_actualizacion', 'Fk_user'], 'integer'],
+            [['Nombre', 'Ap_paterno'], 'string', 'max' => 30],
+            [['Ap_materno'], 'string', 'max' => 50],
             [['Correo'], 'string', 'max' => 40],
             [['Turno'], 'string', 'max' => 10],
             [['Fk_carrera'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::class, 'targetAttribute' => ['Fk_carrera' => 'ID']],

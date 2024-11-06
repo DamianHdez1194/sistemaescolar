@@ -17,8 +17,8 @@ class EstudianteSearch extends Estudiante
     public function rules()
     {
         return [
-            [['ID', 'Ap_paterno', 'Ap_materno', 'Fk_carrera', 'Semestre', 'Fecha_creacion', 'Fecha_actualizacion', 'Fk_user'], 'integer'],
-            [['Nombre', 'Correo', 'Fecha_inscripcion', 'Turno'], 'safe'],
+            [['ID', 'Fk_carrera', 'Semestre', 'Fecha_creacion', 'Fecha_actualizacion', 'Fk_user'], 'integer'],
+            [['Nombre', 'Ap_paterno', 'Ap_materno', 'Correo', 'Fecha_inscripcion', 'Turno'], 'safe'],
         ];
     }
 
@@ -59,8 +59,6 @@ class EstudianteSearch extends Estudiante
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
-            'Ap_paterno' => $this->Ap_paterno,
-            'Ap_materno' => $this->Ap_materno,
             'Fecha_inscripcion' => $this->Fecha_inscripcion,
             'Fk_carrera' => $this->Fk_carrera,
             'Semestre' => $this->Semestre,
@@ -70,6 +68,8 @@ class EstudianteSearch extends Estudiante
         ]);
 
         $query->andFilterWhere(['like', 'Nombre', $this->Nombre])
+            ->andFilterWhere(['like', 'Ap_paterno', $this->Ap_paterno])
+            ->andFilterWhere(['like', 'Ap_materno', $this->Ap_materno])
             ->andFilterWhere(['like', 'Correo', $this->Correo])
             ->andFilterWhere(['like', 'Turno', $this->Turno]);
 

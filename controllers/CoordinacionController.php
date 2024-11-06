@@ -7,28 +7,24 @@ use app\models\search\CoordinacionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii;
+use app\components\Util;
 /**
  * CoordinacionController implements the CRUD actions for Coordinacion model.
  */
 class CoordinacionController extends Controller
 {
+    public $freeAccessActions = ['']; //Acciones Permitidas
     /**
      * @inheritDoc
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
+        return [
+            'ghost-access' => [
+                'class' => 'webvimark\modules\UserManagement\components\GhostAccessControl',
+            ],
+        ];
     }
 
     /**
@@ -55,8 +51,9 @@ class CoordinacionController extends Controller
      */
     public function actionView($ID)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($ID),
+        $ID = Util::encrypt_decryptID($ID,2);
+        return $this->renderAjax('view', [
+            'model' => $this->findModel(Util::encrypt_decryptID($ID,1)),
         ]);
     }
 
@@ -69,17 +66,19 @@ class CoordinacionController extends Controller
     {
         $model = new Coordinacion();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'ID' => $model->ID]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('create', [
+                        'model' => $model
+            ]);
+        } else {
+            return $this->render('create', [
+                        'model' => $model
+            ]);
+        }
     }
 
     /**
@@ -91,15 +90,21 @@ class CoordinacionController extends Controller
      */
     public function actionUpdate($ID)
     {
-        $model = $this->findModel($ID);
+        $ID = Util::encrypt_decryptID($ID,2);
+        $model = $this->findModel(Util::encrypt_decryptID($ID,1));
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'ID' => $model->ID]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('update', [
+                        'model' => $model
+            ]);
+        } else {
+            return $this->render('update', [
+                        'model' => $model
+            ]);
+        }
     }
 
     /**
@@ -111,7 +116,8 @@ class CoordinacionController extends Controller
      */
     public function actionDelete($ID)
     {
-        $this->findModel($ID)->delete();
+        $ID = Util::encrypt_decryptID($ID,2);
+        $this->findModel(Util::encrypt_decryptID($ID,1))->delete();
 
         return $this->redirect(['index']);
     }
@@ -125,9 +131,11 @@ class CoordinacionController extends Controller
      */
     protected function findModel($ID)
     {
+        $ID = Util::encrypt_decryptID($ID,2);
         if (($model = Coordinacion::findOne(['ID' => $ID])) !== null) {
             return $model;
         }
+
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }

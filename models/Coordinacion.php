@@ -1,7 +1,8 @@
 <?php
 
 namespace app\models;
-
+use yii\behaviors\BlameableBehavior;
+use yii\db\ActiveRecord;
 use Yii;
 
 /**
@@ -19,6 +20,25 @@ use Yii;
 class Coordinacion extends \yii\db\ActiveRecord
 {
     /**
+     * Funcion para grabar el usuario y las fechas actuales
+     */
+    public function behaviors(){
+        return[
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'Fk_user',
+                'updatedByAttribute' => 'Fk_user',
+            ],
+            'timestamp' => [
+            'class' => 'yii\behaviors\TimestampBehavior',
+            'attributes' => [
+                ActiveRecord::EVENT_BEFORE_INSERT => ['Fecha_creacion', 'Fecha_actualizacion'],
+                ActiveRecord::EVENT_BEFORE_UPDATE => ['Fecha_actualizacion'],
+            ],
+        ],
+    ];
+    }
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -34,7 +54,8 @@ class Coordinacion extends \yii\db\ActiveRecord
         return [
             [['Fecha_creacion', 'Fecha_actualizacion', 'Fk_user'], 'integer'],
             [['Nombre'], 'string', 'max' => 255],
-            [['Fk_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['Fk_user' => 'id']],
+            //[['Fk_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['Fk_user' => 'id']],
+            [['Fk_user'], 'exist', 'skipOnError' => true, 'targetClass' => \webvimark\modules\UserManagement\models\User::className(), 'targetAttribute' => ['Fk_user' => 'id']],
         ];
     }
 
@@ -46,9 +67,9 @@ class Coordinacion extends \yii\db\ActiveRecord
         return [
             'ID' => 'ID',
             'Nombre' => 'Nombre',
-            'Fecha_creacion' => 'Fecha Creacion',
-            'Fecha_actualizacion' => 'Fecha Actualizacion',
-            'Fk_user' => 'Fk User',
+            'Fecha_creacion' => 'Fecha Creación',
+            'Fecha_actualizacion' => 'Fecha Actualización',
+            'Fk_user' => 'Id Usuario',
         ];
     }
 
@@ -59,7 +80,7 @@ class Coordinacion extends \yii\db\ActiveRecord
      */
     public function getFkUser()
     {
-        return $this->hasOne(User::class, ['id' => 'Fk_user']);
+        return $this->hasOne(\webvimark\modules\UserManagement\models\User::className(), ['id' => 'Fk_user']);
     }
 
     /**

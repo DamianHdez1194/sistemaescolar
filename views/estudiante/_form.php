@@ -14,9 +14,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'Nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Ap_paterno')->textInput() ?>
+    <?= $form->field($model, 'Ap_paterno')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Ap_materno')->textInput() ?>
+    <?= $form->field($model, 'Ap_materno')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'Correo')->textInput(['maxlength' => true]) ?>
 
